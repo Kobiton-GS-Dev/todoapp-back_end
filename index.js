@@ -8,12 +8,17 @@ const app = express()
 app.use(express.json())
 
 // connect to MongoDB
-mongoose.connect(
-  'mongodb+srv://namlnnguyen:1qazQAZ@cluster0.dnem1.mongodb.net/todoApp?retryWrites=true&w=majority',
-  {
+mongoose
+  .connect(process.env.DB_CONNECTION, {
     useNewUrlParser: true
-  }
-)
+  })
+  .then(() => {
+    console.log('Connect to DB successfully.')
+  })
+  .catch(err => {
+    console.error(err)
+    console.log('There is some problem with DB Connection. Please try again.')
+  })
 
 app.get('/', async (req, res) => {
   // render all current task in database
