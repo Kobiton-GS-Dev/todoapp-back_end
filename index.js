@@ -1,9 +1,11 @@
-require('dotenv').config()
+const dotenv = require('dotenv')
 const express = require('express')
 const mongoose = require('mongoose')
 const TaskModel = require('./models/task')
 
+dotenv.config()
 const app = express()
+const PORT = process.env.PORT || 3001
 
 app.use(express.json())
 
@@ -35,6 +37,8 @@ app.get('/', async (req, res) => {
   }
 })
 
-app.listen(process.env.PORT || 3001, () => {
-  console.log('Server is running at http://localhost:3001')
+app.listen(PORT, err => {
+  if (err) console.log('Error in server setup.')
+
+  console.log(`Server is listening on port ${PORT}.`)
 })
