@@ -5,8 +5,7 @@ const router = express.Router()
 
 router.get('/', TaskController.findAllTasks)
 router.post('/', TaskController.addTask)
-router.patch('/content/:id', TaskController.updateTitle)
-router.patch('/status/:id', TaskController.updateStatus)
-router.delete('/', TaskController.deleteCompleted)
+router.put('/:id', TaskController.updateTask)
+router.delete('/:id', TaskController.deleteTask)
 
 module.exports = router
