@@ -1,13 +1,22 @@
 const dotenv = require('dotenv')
 const express = require('express')
 const mongoose = require('mongoose')
-const TaskModel = require('./models/task')
+const bodyParser = require('body-parser')
+const cors = require('cors')
+const apiRoute = require('./routers/router')
 
 dotenv.config()
 const app = express()
 const PORT = process.env.PORT || 3001
 
 app.use(express.json())
+app.use(cors())
+app.use(bodyParser.json())
+app.use(
+  bodyParser.urlencoded({
+    extended: true
+  })
+)
 
 // connect to MongoDB
 mongoose
@@ -22,20 +31,7 @@ mongoose
     console.log('There is some problem with DB Connection. Please try again.')
   })
 
-app.get('/', async (req, res) => {
-  // render all current task in database
-  const task = new TaskModel({
-    taskContent: 'cleaning house',
-    taskCompleted: false
-  })
-
-  try {
-    await task.save()
-    res.send('inserted mock data')
-  } catch (err) {
-    console.log(err)
-  }
-})
+app.use('/', apiRoute)
 
 app.listen(PORT, err => {
   if (err) console.log('Error in server setup.')
