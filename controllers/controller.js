@@ -8,31 +8,28 @@ module.exports.findAllTasks = async (req, res) => {
 
 // add new task to database
 module.exports.addTask = async (req, res) => {
-  const title = req.body.title
-  const isCompleted = req.body.isCompleted
+  const { title, isCompleted } = req.body
   const createdAt = new Date().toLocaleString()
-  const updatedAt = ''
-  const tasksTobeAdded = new TaskModel({
+  const updatedAt = new Date().toLocaleString()
+  const task = await TaskModel.create({
     title,
     isCompleted,
     createdAt,
-    updatedAt,
+    updatedAt
   })
-
-  const tasks = await tasksTobeAdded.save()
-  return res.json(tasks)
+  return res.json(task)
 }
 
 // update tasks
 module.exports.updateTask = async (req, res) => {
-  const dataToUpdate = req.body
-  dataToUpdate.updatedAt = new Date().toLocaleString()
-  await TaskModel.findByIdAndUpdate(
-    req.params.id,
-    dataToUpdate,
-    (err, tasks) => {
-      if (err) return res.status(500).json(err)
-      return res.json(tasks)
+  const { id } = req.body
+  const dataToUpdate = {
+    ...req.body,
+    updatedAt: new Date().toLocaleString()
+  }
+  await TaskModel.findByIdAndUpdate(id, dataToUpdate, (err, task) => {
+    if (err) return res.status(500).json(err)
+    return res.json(task)
   })
 }
 
@@ -41,15 +38,6 @@ module.exports.deleteTask = async (req, res) => {
   await TaskModel.findByIdAndRemove(req.params.id, (err, tasks) => {
     if (err) return res.status(500).json(err)
     const message = 'Deleted task'
-    return res.json(message)
-  })
-}
-
-// clear completed tasks
-module.exports.deleteCompleted = async (req, res) => {
-  await TaskModel.deleteMany( {isCompleted: true}, (err, tasks) => {
-    if (err) return res.status(500).json(err)
-    const message = 'Clear completed tasks'
     return res.json(message)
   })
 }
