@@ -1,6 +1,7 @@
 const dotenv = require('dotenv')
 const express = require('express')
 const mongoose = require('mongoose')
+const bodyParser = require('body-parser')
 const cors = require('cors')
 const apiRoute = require('./routers/router')
 
@@ -8,11 +9,9 @@ dotenv.config()
 const app = express()
 const PORT = process.env.PORT || 3001
 
-app.use(express.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 app.use(cors())
-app.use(express.urlencoded({
-  extended: true
-}));
 
 // connect to MongoDB
 mongoose
