@@ -35,7 +35,7 @@ module.exports.updateTask = async (req, res) => {
 
 // delete tasks
 module.exports.deleteTask = async (req, res) => {
-  await TaskModel.findByIdAndRemove(req.params.id, (err, tasks) => {
+  await TaskModel.findByIdAndRemove(req.body.id, (err, tasks) => {
     if (err) return res.status(500).json(err)
     const message = `The task with id ${req.params.id} has been deleted successfully.`
     return res.json(message)
